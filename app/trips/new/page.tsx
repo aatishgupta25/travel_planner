@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { createTrip } from "@/lib/actions/create-trip";
 import { cn } from "@/lib/utils";
-import { UploadButton } from "@/lib/upload-thing";
+import { UploadButton } from "@/lib/uploadthing";
 import { useState, useTransition } from "react";
 import Image from "next/image";
 
