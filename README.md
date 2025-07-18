@@ -1,1 +1,1 @@
-# Deployed on : [Link](https://www.apple.com)
+# Deployed on Vercel @ [Link](https://travel-planner-aatishgupta25.vercel.app)
