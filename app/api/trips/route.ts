@@ -6,14 +6,16 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const session = await auth();
-    if (!session) {
+    const userId = session?.user?.id;
+
+    if (!userId) {
       return new NextResponse("Not authenticated", { status: 401 });
     }
 
     const locations = await prisma.location.findMany({
       where: {
         trip: {
-          userId: session.user?.id,
+          userId,
         },
       },
       select: {
@@ -43,7 +45,7 @@ export async function GET() {
 
     return NextResponse.json(transformedLocations);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
