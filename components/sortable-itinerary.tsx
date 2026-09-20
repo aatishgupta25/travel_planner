@@ -1,4 +1,4 @@
-import { Location } from "@/app/generated/prisma";
+import type { Location } from "@prisma/client";
 import { reorderItinerary } from "@/lib/actions/reorder-itineraty";
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
 import {
@@ -79,8 +79,8 @@ export default function SortableItinerary({
         strategy={verticalListSortingStrategy}
       >
         <div className="space-y-4">
-          {localLocation.map((item, key) => (
-            <SortableItem key={key} item={item} />
+          {localLocation.map((item) => (
+            <SortableItem key={item.id} item={item} />
           ))}
         </div>
       </SortableContext>

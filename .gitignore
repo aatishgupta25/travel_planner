@@ -19,7 +19,7 @@ out/
 # Prisma
 prisma/dev.db
 prisma/dev.db-journal
-prisma/migrations/
+app/generated/prisma/
 
 # UploadThing (if it stores temp files)
 uploadthing.json
