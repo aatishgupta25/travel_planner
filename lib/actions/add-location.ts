@@ -10,6 +10,10 @@ async function geocodeAddress(address: string) {
     `https://us1.locationiq.com/v1/search?key=${apiKey}&q=${encodeURIComponent(address)}&format=json&limit=1`
   );
 
+  if (!response.ok) {
+    throw new Error("Unable to geocode address");
+  }
+
   const data = await response.json();
   if (!data.length) throw new Error("Address not found");
 
@@ -19,11 +23,22 @@ async function geocodeAddress(address: string) {
 
 export async function addLocation(formData: FormData, tripId: string) {
   const session = await auth();
-  if (!session) {
+  const userId = session?.user?.id;
+
+  if (!userId) {
     throw new Error("Not authenticated");
   }
 
-  const address = formData.get("address")?.toString();
+  const trip = await prisma.trip.findFirst({
+    where: { id: tripId, userId },
+    select: { id: true },
+  });
+
+  if (!trip) {
+    throw new Error("Trip not found");
+  }
+
+  const address = formData.get("address")?.toString().trim();
   if (!address) {
     throw new Error("Missing address");
   }
@@ -31,7 +46,7 @@ export async function addLocation(formData: FormData, tripId: string) {
   const { lat, lng } = await geocodeAddress(address);
 
   const count = await prisma.location.count({
-    where: { tripId },
+    where: { tripId: trip.id },
   });
 
   await prisma.location.create({
@@ -39,10 +54,10 @@ export async function addLocation(formData: FormData, tripId: string) {
       locationTitle: address,
       lat,
       lng,
-      tripId,
+      tripId: trip.id,
       order: count,
     },
   });
 
-  redirect(`/trips/${tripId}`);
+  redirect(`/trips/${trip.id}`);
 }

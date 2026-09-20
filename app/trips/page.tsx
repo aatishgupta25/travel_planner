@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -12,9 +11,18 @@ import Link from "next/link";
 
 export default async function TripsPage() {
   const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return (
+      <div className="flex justify-center items-center h-screen text-gray-700 text-xl">
+        Please Sign In.
+      </div>
+    );
+  }
 
   const trips = await prisma.trip.findMany({
-    where: { userId: session?.user?.id },
+    where: { userId },
   });
 
   const sortedTrips = [...trips].sort(
@@ -26,15 +34,6 @@ export default async function TripsPage() {
   const upcomingTrips = sortedTrips.filter(
     (trip) => new Date(trip.startDate) >= today
   );
-
-  if (!session) {
-    return (
-      <div className="flex justify-center items-center h-screen text-gray-700 text-xl">
-        {" "}
-        Please Sign In.
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6 container mx-auto px-4 py-8">
@@ -52,7 +51,6 @@ export default async function TripsPage() {
 
         <CardContent>
           <p>
-            {" "}
             {trips.length === 0
               ? "Start planning your first trip by clicking the button above."
               : `You have ${trips.length} ${
@@ -82,8 +80,8 @@ export default async function TripsPage() {
           </Card>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {sortedTrips.slice(0, 6).map((trip, key) => (
-              <Link key={key} href={`/trips/${trip.id}`}>
+            {sortedTrips.slice(0, 6).map((trip) => (
+              <Link key={trip.id} href={`/trips/${trip.id}`}>
                 <Card className="h-full hover:shadow-md transition-shadow">
                   <CardHeader>
                     <CardTitle className="line-clamp-1">{trip.title}</CardTitle>
@@ -94,7 +92,6 @@ export default async function TripsPage() {
                       {trip.description}
                     </p>
                     <div className="text-sm">
-                      {" "}
                       {new Date(trip.startDate).toLocaleDateString()} -{" "}
                       {new Date(trip.endDate).toLocaleDateString()}
                     </div>
