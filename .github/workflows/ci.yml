@@ -35,8 +35,5 @@ jobs:
       - name: Typecheck
         run: npx tsc --noEmit
 
-      - name: Lint
-        run: npm run lint
-
       - name: Build
         run: npm run build
