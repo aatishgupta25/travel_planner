@@ -1,6 +1,6 @@
 "use client";
 
-import { Location, Trip } from "@/app/generated/prisma";
+import type { Location, Trip } from "@prisma/client";
 import Image from "next/image";
 import { Calendar, MapPin, Plus } from "lucide-react";
 import Link from "next/link";
@@ -23,10 +23,8 @@ export default function TripDetailClient({ trip }: TripDetailClientProps) {
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
-      {" "}
       {trip.imageUrl && (
         <div className="w-full h-72 md:h-96 overflow-hidden rounded-xl shadow-lg relative">
-          {" "}
           <Image
             src={trip.imageUrl}
             alt={trip.title}
@@ -39,7 +37,6 @@ export default function TripDetailClient({ trip }: TripDetailClientProps) {
       <div className="bg-white p-6 shadow rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center">
         <div>
           <h1 className="text-4xl font-extrabold text-gray-900">
-            {" "}
             {trip.title}
           </h1>
 
@@ -54,7 +51,6 @@ export default function TripDetailClient({ trip }: TripDetailClientProps) {
         <div className="mt-4 md:mt-0">
           <Link href={`/trips/${trip.id}/itinerary/new`}>
             <Button>
-              {" "}
               <Plus className="mr-2 h-5 w-5" /> Add Location
             </Button>
           </Link>
@@ -99,7 +95,6 @@ export default function TripDetailClient({ trip }: TripDetailClientProps) {
                     <div>
                       <p> Destinations</p>
                       <p>
-                        {" "}
                         {trip.locations.length}{" "}
                         {trip.locations.length === 1 ? "location" : "locations"}
                       </p>
@@ -115,7 +110,6 @@ export default function TripDetailClient({ trip }: TripDetailClientProps) {
                   <p>Add locations to see them on the map.</p>
                   <Link href={`/trips/${trip.id}/itinerary/new`}>
                     <Button>
-                      {" "}
                       <Plus className="mr-2 h-5 w-5" /> Add Location
                     </Button>
                   </Link>
@@ -140,7 +134,6 @@ export default function TripDetailClient({ trip }: TripDetailClientProps) {
                 <p>Add locations to see them on the itinerary.</p>
                 <Link href={`/trips/${trip.id}/itinerary/new`}>
                   <Button>
-                    {" "}
                     <Plus className="mr-2 h-5 w-5" /> Add Location
                   </Button>
                 </Link>
@@ -159,7 +152,6 @@ export default function TripDetailClient({ trip }: TripDetailClientProps) {
                 <p>Add locations to see them on the map.</p>
                 <Link href={`/trips/${trip.id}/itinerary/new`}>
                   <Button>
-                    {" "}
                     <Plus className="mr-2 h-5 w-5" /> Add Location
                   </Button>
                 </Link>
@@ -169,7 +161,7 @@ export default function TripDetailClient({ trip }: TripDetailClientProps) {
         </Tabs>
       </div>
       <div className="text-center">
-        <Link href={`/trips`}>
+        <Link href="/trips">
           <Button> Back to Trips</Button>
         </Link>
       </div>
